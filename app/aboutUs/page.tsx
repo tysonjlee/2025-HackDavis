@@ -23,7 +23,7 @@ export default function AboutUsPage() {
         </CardHeader>
         <CardContent className="mt-4 text-lg leading-relaxed">
           <p>
-            <strong>ClubHub</strong> is your go-to social app for discovering and getting involved with clubs on campus. Whether you're looking for new communities, planning your schedule, or wanting to stay connected with friends, ClubHub makes it easy.
+            <strong>ClubHub</strong> is your go-to social platform for discovering and getting involved with clubs on campus. Whether you're looking for new communities, planning your schedule, or wanting to stay connected with friends, ClubHub makes it easy.
           </p>
           <ul className="list-disc mt-4 ml-6 space-y-2">
             <li>Browse a wide range of student clubs and organizations</li>
