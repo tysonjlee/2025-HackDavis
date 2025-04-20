@@ -20,6 +20,7 @@ export default function ProfilePage() {
   const [bio, setBio] = useState('');
   const [profilePic, setProfilePic] = useState<string | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   useEffect(() => {
     const loadProfile = async () => {
@@ -68,11 +69,11 @@ export default function ProfilePage() {
 
     const fileExt = file.name.split('.').pop();
     const fileName = `${userId}.${fileExt}`;
-    const filePath = `${fileName}`;
+    const filePath = fileName;
 
     const { error: uploadError } = await supabase.storage
       .from('avatars')
-      .upload(filePath, file, { upsert: true });
+      .upload(filePath, file, { upsert: true }); // ✅ Overwrite old file
 
     if (uploadError) {
       console.error('Error uploading image:', uploadError);
@@ -84,14 +85,16 @@ export default function ProfilePage() {
       .getPublicUrl(filePath);
 
     const publicURL = publicURLData?.publicUrl;
-    console.log("Public profile pic URL:", publicURL);
+    const cacheBustedURL = `${publicURL}?t=${Date.now()}`;
 
     if (publicURL) {
-      setProfilePic(publicURL);
+      // Update UI
+      setProfilePic(cacheBustedURL);
 
+      // Update database with latest URL
       const { error: updateError } = await supabase
         .from('profiles')
-        .update({ avatar_url: publicURL })
+        .update({ avatar_url: cacheBustedURL })
         .eq('id', userId);
 
       if (updateError) {
@@ -105,13 +108,14 @@ export default function ProfilePage() {
 
     const { error } = await supabase
       .from('profiles')
-      .update({ name, bio, avatar_url: profilePic })
+      .update({ name, bio })
       .eq('id', userId);
 
     if (error) {
       console.error('Error saving profile:', error);
     } else {
       console.log('Profile updated successfully!');
+      setIsDialogOpen(false);
     }
   };
 
@@ -131,7 +135,7 @@ export default function ProfilePage() {
               className="w-24 h-24 rounded-full object-cover border border-gray-300"
               onError={(e) => {
                 e.currentTarget.onerror = null;
-                e.currentTarget.src = "/placeholder-avatar.png"; // fallback image
+                e.currentTarget.src = "/placeholder-avatar.png";
               }}
             />
           ) : (
@@ -141,7 +145,7 @@ export default function ProfilePage() {
           )}
         </div>
 
-        <Dialog>
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
             <Button className="w-full bg-[#002855] text-white hover:bg-[#1a3e7c] mt-2">
               Edit Profile
@@ -179,7 +183,9 @@ export default function ProfilePage() {
                 />
               </div>
               <div className="flex justify-end gap-2">
-                <Button variant="outline">Cancel</Button>
+                <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
+                  Cancel
+                </Button>
                 <Button onClick={handleSave}>Save</Button>
               </div>
             </div>
@@ -187,8 +193,7 @@ export default function ProfilePage() {
         </Dialog>
 
         <div className="pt-6 border-t text-center text-sm text-gray-500">
-          <Link href="/" className="hover:text-[#002855] block mb-2">← Back to Home</Link>
-          <Link href="/settings" className="hover:text-[#002855]">Go to Settings</Link>
+          <Link href="/clubLists" className="hover:text-[#002855]">Go to Club Lists</Link>
         </div>
       </div>
     </main>
