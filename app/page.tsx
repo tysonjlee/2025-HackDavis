@@ -25,25 +25,31 @@ export default function HomePage() {
 
       {/* 🧱 Main content card */}
       <div className="z-10">
-        <Card className="w-[90%] max-w-md shadow-xl border-2 border-[#002855] bg-white rounded-2xl p-6 space-y-6">
+        <Card className="w-full max-w-xl shadow-xl border-2 border-[#002855] bg-white rounded-2xl p-10 space-y-8">
           <CardHeader>
-            <CardTitle className="text-3xl font-bold text-center text-[#002855]">
+            <CardTitle className="text-5xl font-bold text-center text-[#002855]">
               Welcome to ClubHub
             </CardTitle>
           </CardHeader>
-          <CardContent className="flex flex-col items-center space-y-4">
+          <CardContent className="flex flex-col items-center space-y-6">
             <Link href="/login">
-              <Button className="w-48 bg-[#002855] text-white hover:bg-[#1a3e7c]">
+              <Button className="w-60 py-4 text-lg bg-[#002855] text-white hover:bg-[#1a3e7c]">
                 Log In
               </Button>
             </Link>
             <Link href="/register">
-              <Button className="w-48 bg-[#002855] text-white hover:bg-[#1a3e7c]">
+              <Button className="w-60 py-4 text-lg bg-[#002855] text-white hover:bg-[#1a3e7c]">
                 Register
               </Button>
             </Link>
           </CardContent>
         </Card>
+        {/* 🔗 Link to About Us */}
+        <div className="mt-6 text-center">
+          <Link href="/aboutUs" className="text-white text-lg underline hover:text-gray-200">
+            Learn more about us
+          </Link>
+        </div>
       </div>
     </main>
   );
