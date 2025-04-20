@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 
 import {
@@ -21,6 +21,7 @@ export default function ProfilePage() {
   const [profilePic, setProfilePic] = useState<string | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     const loadProfile = async () => {
@@ -73,7 +74,7 @@ export default function ProfilePage() {
 
     const { error: uploadError } = await supabase.storage
       .from('avatars')
-      .upload(filePath, file, { upsert: true }); // ✅ Overwrite file
+      .upload(filePath, file, { upsert: true });
 
     if (uploadError) {
       console.error('Error uploading image:', uploadError);
@@ -85,13 +86,11 @@ export default function ProfilePage() {
       .getPublicUrl(filePath);
 
     const publicURL = publicURLData?.publicUrl;
-    const cacheBustedURL = `${publicURL}?t=${Date.now()}`; // ✅ Unique every time
+    const cacheBustedURL = `${publicURL}?t=${Date.now()}`;
 
     if (publicURL) {
-      // Show updated image in UI
       setProfilePic(cacheBustedURL);
 
-      // Update the database with cache-busted URL so Supabase doesn't skip it
       const { error: updateError } = await supabase
         .from('profiles')
         .update({ avatar_url: cacheBustedURL })
@@ -119,11 +118,34 @@ export default function ProfilePage() {
     }
   };
 
+  const handleSignOut = async () => {
+    await supabase.auth.signOut();
+    router.push('/login');
+  };
+
   return (
-    <main className="min-h-screen bg-gradient-to-br from-white to-[#f2f5fa] flex items-center justify-center px-4 py-8">
-      <div className="w-full max-w-md bg-white rounded-2xl shadow-xl border border-gray-200 p-6 space-y-6">
+    <div className="relative flex items-center justify-center min-h-screen animated-gradient overflow-hidden px-4">
+      {/* 🌊 Animated background wave */}
+      <div className="absolute top-0 left-0 w-full overflow-hidden z-0 pointer-events-none">
+        <svg
+          className="w-full h-[400px] animate-sine-wave transform-gpu"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 1440 320"
+          preserveAspectRatio="none"
+        >
+          <path
+            fill="#ffffff"
+            fillOpacity="0.1"
+            d="M0,224L60,224C120,224,240,224,360,197.3C480,171,600,117,720,96C840,75,960,85,1080,96C1200,107,1320,117,1380,122.7L1440,128L1440,0L1380,0C1320,0,1200,0,1080,0C960,0,840,0,720,0C600,0,480,0,360,0C240,0,120,0,60,0L0,0Z"
+          ></path>
+        </svg>
+      </div>
+
+      <div className="relative w-full max-w-md bg-white rounded-3xl shadow-2xl border border-gray-100 p-8 space-y-8 z-10">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-[#002855]">Your Profile</h1>
+          <h1 className="text-3xl font-bold text-[#002855]">
+            {name ? `Hi ${name}!` : 'Your Profile'}
+          </h1>
           <p className="text-sm text-gray-500 mt-1">Manage your public info</p>
         </div>
 
@@ -132,14 +154,14 @@ export default function ProfilePage() {
             <img
               src={profilePic}
               alt="Profile"
-              className="w-24 h-24 rounded-full object-cover border border-gray-300"
+              className="w-28 h-28 rounded-full object-cover border-4 border-[#002855] shadow-md"
               onError={(e) => {
                 e.currentTarget.onerror = null;
                 e.currentTarget.src = "/placeholder-avatar.png";
               }}
             />
           ) : (
-            <div className="w-24 h-24 rounded-full bg-gray-300 flex items-center justify-center text-sm text-white">
+            <div className="w-28 h-28 rounded-full bg-gray-300 flex items-center justify-center text-sm text-white">
               No Image
             </div>
           )}
@@ -147,7 +169,7 @@ export default function ProfilePage() {
 
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
-            <Button className="w-full bg-[#002855] text-white hover:bg-[#1a3e7c] mt-2">
+            <Button className="w-full bg-[#002855] text-white hover:bg-[#1a3e7c]">
               Edit Profile
             </Button>
           </DialogTrigger>
@@ -192,10 +214,22 @@ export default function ProfilePage() {
           </DialogContent>
         </Dialog>
 
-        <div className="pt-6 border-t text-center text-sm text-gray-500">
-          <Link href="/clubLists" className="hover:text-[#002855]">Go to Club Lists</Link>
+        <div className="pt-6 border-t text-center space-y-3">
+          <Button
+            className="w-full bg-[#FFD100] text-[#002855] hover:bg-[#e6bf00]"
+            onClick={() => router.push('/clubLists')}
+          >
+            Go to Club Lists
+          </Button>
+          <Button
+            variant="outline"
+            className="w-full text-red-600 border-red-500 hover:bg-red-50"
+            onClick={handleSignOut}
+          >
+            Sign Out
+          </Button>
         </div>
       </div>
-    </main>
+    </div>
   );
 }

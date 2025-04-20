@@ -1,18 +1,27 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 export default function AddFriendsPage() {
+  const router = useRouter();
   const [emailInput, setEmailInput] = useState('');
   const [friendProfiles, setFriendProfiles] = useState<
     { id: string; name: string; avatar_url: string | null }[]
   >([]);
   const [userId, setUserId] = useState<string | null>(null);
+  const [toastMsg, setToastMsg] = useState<string | null>(null);
+
+  const showToast = (message: string) => {
+    setToastMsg(message);
+    setTimeout(() => {
+      setToastMsg(null);
+    }, 2500);
+  };
 
   useEffect(() => {
     const fetchUserAndFriends = async () => {
@@ -46,27 +55,42 @@ export default function AddFriendsPage() {
 
     const { data: user, error: findError } = await supabase
       .from('profiles')
-      .select('id, name, avatar_url')
+      .select('id, name, avatar_url, email')
       .eq('email', emailInput)
       .single();
 
-    if (!findError && user) {
-      const { error } = await supabase
-        .from('friends')
-        .insert({ user_id: userId, friend_id: user.id });
+    if (findError || !user) {
+      showToast('User not found with that email.');
+      return;
+    }
 
-      if (!error) {
-        setFriendProfiles((prev) => [...prev, {
+    if (user.id === userId) {
+      showToast("You can't add yourself as a friend.");
+      return;
+    }
+
+    const alreadyFriends = friendProfiles.some((f) => f.id === user.id);
+    if (alreadyFriends) {
+      showToast('This user is already your friend.');
+      return;
+    }
+
+    const { error } = await supabase
+      .from('friends')
+      .insert({ user_id: userId, friend_id: user.id });
+
+    if (!error) {
+      setFriendProfiles((prev) => [
+        ...prev,
+        {
           id: user.id,
           name: user.name,
           avatar_url: user.avatar_url || null,
-        }]);
-        setEmailInput('');
-      } else {
-        console.error('Error adding friend:', error);
-      }
+        },
+      ]);
+      setEmailInput('');
     } else {
-      console.error('User not found with that email.');
+      console.error('Error adding friend:', error);
     }
   };
 
@@ -87,9 +111,22 @@ export default function AddFriendsPage() {
 
   return (
     <main className="min-h-screen bg-gray-100 flex items-center justify-center px-4 py-10 relative">
-      <Link href="/clubLists" className="absolute top-4 right-4 text-sm text-blue-600 hover:underline">
+      {/* 🟦 Back Button Styled */}
+      <Button
+        variant="outline"
+        className="absolute top-4 right-4 text-[#002855] border-[#002855] hover:bg-[#e5e7eb]"
+        onClick={() => router.push('/clubLists')}
+      >
         ← Back to Club Lists
-      </Link>
+      </Button>
+
+      {/* 🍞 Toast Message */}
+      {toastMsg && (
+        <div className="absolute top-6 left-1/2 transform -translate-x-1/2 bg-red-500 text-white px-4 py-2 rounded-md shadow-lg animate-fade-out">
+          {toastMsg}
+        </div>
+      )}
+
       <Card className="w-full max-w-md bg-white rounded-2xl shadow-xl p-6">
         <CardHeader>
           <CardTitle className="text-xl font-bold text-center">Add Friends</CardTitle>
