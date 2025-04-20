@@ -1,25 +1,166 @@
-/* Add the wave animation */
-@keyframes waveAnimation {
-    0% {
-      transform: translateX(0);
-    }
-    100% {
-      transform: translateX(-100%);
-    }
+/* Infinite Wavy Blue Background Animation */
+@keyframes waveBackground {
+  0% {
+    background-position: 0% 50%;
   }
-  
-  .animate-wave {
-    animation: waveAnimation 10s linear infinite;
+  20% {
+    background-position: 25% 50%;
   }
-  
-  /* Optional: Additional custom styles */
-  .bg-wave {
-    background-color: #f0f8ff; /* Light color for the background, can change */
+  40% {
+    background-position: 50% 50%;
   }
-  
-  .bg-gradient {
-    background: linear-gradient(45deg, #004e92, #006bb3, #004a6f);
+  60% {
+    background-position: 75% 50%;
   }
-  
-  /* Other custom styles if needed */
-  
+  80% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+body {
+  background: linear-gradient(135deg, #004e92, #006bb3, #004a6f);
+  animation: waveBackground 10s ease-in-out infinite;
+  background-size: 300% 300%;
+  color: #fff;
+  background-attachment: fixed; /* Ensures the background stays fixed while scrolling */
+}
+
+/* Stronger Wavy Motion for the Background */
+@keyframes strongerWaveMotion {
+  0% {
+    transform: translateY(0);
+  }
+  25% {
+    transform: translateY(-10px);
+  }
+  50% {
+    transform: translateY(10px);
+  }
+  75% {
+    transform: translateY(-5px);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+.animate-wave {
+  animation: strongerWaveMotion 8s ease-in-out infinite;
+  fill: #66aaff;
+}
+
+/* Hover Effect for the App Icon */
+.w-40:hover {
+  transform: scale(1.1) rotate(15deg);
+  transition: all 0.3s ease-in-out;
+}
+
+/* Glow Effect on Buttons and Inputs */
+button, input {
+  transition: transform 0.2s, box-shadow 0.3s ease;
+}
+
+button:hover, input:hover {
+  transform: scale(1.05);
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Smooth transition for the background gradient change */
+.bg-gradient-to-br {
+  transition: background 1.5s ease;
+}
+
+/* Pulse effect for the button in hover state */
+button:hover {
+  background-color: #FF8C00;
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+/* Pulse animation for buttons */
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(255, 140, 0, 0.7);
+  }
+  70% {
+    transform: scale(1.1);
+    box-shadow: 0 0 20px 15px rgba(255, 140, 0, 0.4);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(255, 140, 0, 0);
+  }
+}
+
+/* Input fields with modern aesthetics */
+input {
+  background-color: rgba(255, 255, 255, 0.2);
+  color: #fff;
+  border-radius: 8px;
+  border: 2px solid #fff;
+  padding: 10px;
+  font-size: 16px;
+  transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+
+input:focus {
+  background-color: rgba(255, 255, 255, 0.4);
+  border-color: #FFD200;
+}
+
+/* Custom Calendar Box */
+h1 {
+  font-family: 'Roboto', sans-serif;
+  font-weight: 700;
+  color: #FFD200;
+  text-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+/* Button transitions */
+button {
+  background-color: #FFD200;
+  color: #002855;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  background-color: #e6c100;
+  transform: scale(1.05);
+}
+
+/* Modal Styling */
+.fixed {
+  z-index: 9999;
+}
+
+.fixed .bg-white {
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+}
+
+.text-xl {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #333;
+}
+
+button {
+  font-weight: bold;
+}
+
+/* Gradient background for event list */
+.event-card {
+  background: linear-gradient(45deg, rgba(255, 215, 0, 0.8), rgba(255, 165, 0, 0.8));
+  padding: 15px;
+  border-radius: 8px;
+  margin: 10px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}

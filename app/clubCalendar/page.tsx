@@ -8,8 +8,9 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 
+
 // Import the custom CSS file
-import './styles.css'; // Make sure to update the path based on your file structure
+import './styles.css'; // Update the path as needed
 
 const locales = {
   'en-US': require('date-fns/locale/en-US'),
@@ -39,7 +40,9 @@ export default function ClubCalendarPage() {
     end: '',
   });
 
-  const [colorScheme, setColorScheme] = useState('blue'); // State to manage color scheme
+  const [colorScheme, setColorScheme] = useState('blue');
+  const [selectedEvent, setSelectedEvent] = useState<any>(null); // State to hold the event clicked
+  const [showModal, setShowModal] = useState(false); // State to show/hide the modal
 
   const handleAddEvent = () => {
     if (!newEvent.title || !newEvent.start || !newEvent.end) {
@@ -50,6 +53,11 @@ export default function ClubCalendarPage() {
     const start = new Date(newEvent.start);
     const end = new Date(newEvent.end);
 
+    if (isNaN(start.getTime()) || isNaN(end.getTime())) {
+      alert('Invalid date format');
+      return;
+    }
+
     if (start > end) {
       alert('Start date must be before end date');
       return;
@@ -59,9 +67,19 @@ export default function ClubCalendarPage() {
     setNewEvent({ title: '', start: '', end: '' });
   };
 
-  // Function to toggle color scheme
   const toggleColorScheme = () => {
     setColorScheme(colorScheme === 'blue' ? 'green' : 'blue');
+  };
+
+  const handleEventClick = (event: any) => {
+    setSelectedEvent(event); // Set the selected event to show details
+    setShowModal(true); // Show the modal
+  };
+
+  const handleRemoveEvent = () => {
+    setEvents(events.filter((event) => event !== selectedEvent)); // Remove the event from the list
+    setShowModal(false); // Close the modal after removal
+    setSelectedEvent(null); // Clear the selected event
   };
 
   return (
@@ -72,15 +90,17 @@ export default function ClubCalendarPage() {
           : 'bg-gradient-to-br from-[#a1e9c8] via-[#b0f8d3] to-[#91e7c6]'
       } bg-[length:200%_200%] animate-bg-blue text-black`}
     >
+      {/* Image as a button redirecting to the homepage */}
       <div className="absolute top-0 left-0 z-10">
-        <img
-          src="/images/clubhub3.png"
-          alt="App Icon"
-          className="w-40 h-40 opacity-90 transition-opacity duration-300 hover:opacity-100 focus:outline-none bg-transparent"
-        />
+        <a href="/" title="Go to homepage">
+          <img
+            src="/images/clubhub3.png"
+            alt="App Icon"
+            className="w-40 h-40 opacity-90 transition-opacity duration-300 hover:opacity-100 focus:outline-none bg-transparent cursor-pointer"
+          />
+        </a>
       </div>
 
-      {/* Wavy Background SVG with animation */}
       <div className="absolute top-0 left-0 right-0 bottom-0 z-0">
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -90,12 +110,11 @@ export default function ClubCalendarPage() {
         >
           <path
             d="M0 0C30 10 30 10 60 10C90 10 90 10 120 10V28H0V0Z"
-            className="fill-[#66aaff]" // Customize the wave color here
+            className="fill-[#66aaff]"
           ></path>
         </svg>
       </div>
 
-      {/* Club Calendar heading with margin top to avoid overlap */}
       <h1
         className={`text-3xl font-bold mb-4 text-center ${
           colorScheme === 'blue' ? 'text-[#ffffff]' : 'text-[#0c4a2f]'
@@ -104,7 +123,6 @@ export default function ClubCalendarPage() {
         Club Calendar
       </h1>
 
-      {/* Button to toggle color scheme */}
       <div className="text-center mb-4 z-10 relative">
         <Button
           className="bg-[#FFD200] text-[#002855] hover:bg-[#e6c100]"
@@ -119,6 +137,7 @@ export default function ClubCalendarPage() {
           <Label>Title</Label>
           <Input
             type="text"
+            required
             value={newEvent.title}
             onChange={(e) => setNewEvent({ ...newEvent, title: e.target.value })}
             placeholder="Event Title"
@@ -128,6 +147,7 @@ export default function ClubCalendarPage() {
           <Label>Start</Label>
           <Input
             type="datetime-local"
+            required
             value={newEvent.start}
             onChange={(e) => setNewEvent({ ...newEvent, start: e.target.value })}
           />
@@ -136,6 +156,7 @@ export default function ClubCalendarPage() {
           <Label>End</Label>
           <Input
             type="datetime-local"
+            required
             value={newEvent.end}
             onChange={(e) => setNewEvent({ ...newEvent, end: e.target.value })}
           />
@@ -163,8 +184,36 @@ export default function ClubCalendarPage() {
           startAccessor="start"
           endAccessor="end"
           style={{ height: '100%', backgroundColor: 'transparent' }}
+          onSelectEvent={handleEventClick} // Handles event click
         />
       </div>
+
+      {showModal && selectedEvent && (
+        <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex items-center justify-center z-20">
+          <div className="bg-white p-6 rounded-lg shadow-lg w-80">
+            <h3 className="text-xl font-bold mb-4">Event Details</h3>
+            <p><strong>Name:</strong> {selectedEvent.title}</p>
+            <p><strong>Start:</strong> {selectedEvent.start.toLocaleString()}</p>
+            <p><strong>End:</strong> {selectedEvent.end.toLocaleString()}</p>
+            <div className="mt-4 text-center">
+              <Button
+                className="bg-red-500 text-white hover:bg-red-600"
+                onClick={handleRemoveEvent} // Removes the event
+              >
+                Remove Event
+              </Button>
+            </div>
+            <div className="mt-4 text-center">
+              <Button
+                className="bg-gray-300 text-black hover:bg-gray-400"
+                onClick={() => setShowModal(false)} // Closes the modal
+              >
+                Close
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
