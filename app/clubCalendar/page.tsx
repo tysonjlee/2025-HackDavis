@@ -92,7 +92,7 @@ export default function ClubCalendarPage() {
     >
       {/* Image as a button redirecting to the homepage */}
       <div className="absolute top-0 left-0 z-10">
-        <a href="/" title="Go to homepage">
+        <a href="/clubLists" title="Go TO Club List">
           <img
             src="/images/clubhub3.png"
             alt="App Icon"
