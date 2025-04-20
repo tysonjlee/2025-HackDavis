@@ -526,6 +526,7 @@ packages:
       '@types/react':
         optional: true
 
+<<<<<<< HEAD
   '@radix-ui/react-switch@1.2.2':
     resolution: {integrity: sha512-7Z8n6L+ifMIIYZ83f28qWSceUpkXuslI2FJ34+kDMTiyj91ENdpdQ7VCidrzj5JfwfZTeano/BnGBbu/jqa5rQ==}
     peerDependencies:
@@ -539,6 +540,8 @@ packages:
       '@types/react-dom':
         optional: true
 
+=======
+>>>>>>> 037fbbafa7ec83f1ef4f3052694b2fd5f940a677
   '@radix-ui/react-use-callback-ref@1.1.1':
     resolution: {integrity: sha512-FkBMwD+qbGQeMu1cOHnuGB6x4yzPjho8ap5WtbEJ26umhgqVXbhekKUQO+hZEL1vU92a3wHwdp0HAcqAUF5iDg==}
     peerDependencies:
@@ -584,6 +587,7 @@ packages:
       '@types/react':
         optional: true
 
+<<<<<<< HEAD
   '@radix-ui/react-use-previous@1.1.1':
     resolution: {integrity: sha512-2dHfToCj/pzca2Ck724OZ5L0EVrr3eHRNsG/b3xQJLA2hZpVCS99bLAX+hm1IHXDEnzU6by5z/5MIY794/a8NQ==}
     peerDependencies:
@@ -602,6 +606,8 @@ packages:
       '@types/react':
         optional: true
 
+=======
+>>>>>>> 037fbbafa7ec83f1ef4f3052694b2fd5f940a677
   '@restart/hooks@0.4.16':
     resolution: {integrity: sha512-f7aCv7c+nU/3mF7NWLtVVr0Ra80RqsO89hO72r+Y/nvQr5+q0UFGkocElTH6MJApvReVh6JHUFYn2cw1WdHF3w==}
     peerDependencies:
@@ -2665,6 +2671,7 @@ snapshots:
     optionalDependencies:
       '@types/react': 19.0.10
 
+<<<<<<< HEAD
   '@radix-ui/react-switch@1.2.2(@types/react-dom@19.0.4(@types/react@19.0.10))(@types/react@19.0.10)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)':
     dependencies:
       '@radix-ui/primitive': 1.1.2
@@ -2680,6 +2687,8 @@ snapshots:
       '@types/react': 19.0.10
       '@types/react-dom': 19.0.4(@types/react@19.0.10)
 
+=======
+>>>>>>> 037fbbafa7ec83f1ef4f3052694b2fd5f940a677
   '@radix-ui/react-use-callback-ref@1.1.1(@types/react@19.0.10)(react@19.0.0)':
     dependencies:
       react: 19.0.0
@@ -2714,6 +2723,7 @@ snapshots:
     optionalDependencies:
       '@types/react': 19.0.10
 
+<<<<<<< HEAD
   '@radix-ui/react-use-previous@1.1.1(@types/react@19.0.10)(react@19.0.0)':
     dependencies:
       react: 19.0.0
@@ -2727,6 +2737,8 @@ snapshots:
     optionalDependencies:
       '@types/react': 19.0.10
 
+=======
+>>>>>>> 037fbbafa7ec83f1ef4f3052694b2fd5f940a677
   '@restart/hooks@0.4.16(react@19.0.0)':
     dependencies:
       dequal: 2.0.3
