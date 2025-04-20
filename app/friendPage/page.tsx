@@ -110,11 +110,27 @@ export default function AddFriendsPage() {
   };
 
   return (
-    <main className="min-h-screen bg-gray-100 flex items-center justify-center px-4 py-10 relative">
+    <div className="relative flex items-center justify-center min-h-screen animated-gradient overflow-hidden px-4 py-10">
+      {/* 🌊 Animated wave top */}
+      <div className="absolute top-0 left-0 w-full overflow-hidden z-0 pointer-events-none">
+        <svg
+          className="w-full h-[400px] animate-sine-wave transform-gpu"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 1440 320"
+          preserveAspectRatio="none"
+        >
+          <path
+            fill="#ffffff"
+            fillOpacity="0.1"
+            d="M0,224L60,224C120,224,240,224,360,197.3C480,171,600,117,720,96C840,75,960,85,1080,96C1200,107,1320,117,1380,122.7L1440,128L1440,0L1380,0C1320,0,1200,0,1080,0C960,0,840,0,720,0C600,0,480,0,360,0C240,0,120,0,60,0L0,0Z"
+          ></path>
+        </svg>
+      </div>
+
       {/* 🟦 Back Button Styled */}
       <Button
         variant="outline"
-        className="absolute top-4 right-4 text-[#002855] border-[#002855] hover:bg-[#e5e7eb]"
+        className="absolute top-4 right-4 text-[#002855] border-[#002855] hover:bg-[#e5e7eb] z-10"
         onClick={() => router.push('/clubLists')}
       >
         ← Back to Club Lists
@@ -122,12 +138,12 @@ export default function AddFriendsPage() {
 
       {/* 🍞 Toast Message */}
       {toastMsg && (
-        <div className="absolute top-6 left-1/2 transform -translate-x-1/2 bg-red-500 text-white px-4 py-2 rounded-md shadow-lg animate-fade-out">
+        <div className="absolute top-6 left-1/2 transform -translate-x-1/2 bg-red-500 text-white px-4 py-2 rounded-md shadow-lg animate-fade-out z-10">
           {toastMsg}
         </div>
       )}
 
-      <Card className="w-full max-w-md bg-white rounded-2xl shadow-xl p-6">
+      <Card className="w-full max-w-md bg-white rounded-2xl shadow-xl p-6 relative z-10">
         <CardHeader>
           <CardTitle className="text-xl font-bold text-center">Add Friends</CardTitle>
         </CardHeader>
@@ -173,6 +189,6 @@ export default function AddFriendsPage() {
           </div>
         </CardContent>
       </Card>
-    </main>
+    </div>
   );
 }
