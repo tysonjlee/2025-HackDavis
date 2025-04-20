@@ -85,11 +85,16 @@ export default function ClubsPage() {
 
   return (
     <div className="relative min-h-screen w-full wavy-bg px-4 py-6">
-      {/* 🔵 Top-Left Profile Button */}
-      <div className="absolute top-4 left-4">
+      {/* 🔵 Top-Left Buttons */}
+      <div className="absolute top-4 left-4 flex gap-2">
         <Link href="/profile">
-          <Button className="bg-[#002855] text-white hover:bg-[#00509E] font-semibold shadow-md transform hover:scale-105 transition duration-300">
+          <Button className="bg-[#002855] text-white hover:bg-[#00509E] font-semibold shadow">
             👤 My Profile
+          </Button>
+        </Link>
+        <Link href="/friendPage">
+          <Button className="bg-[#00509E] text-white hover:bg-[#0074D9] font-semibold shadow">
+            🧑‍🤝‍🧑 Friends
           </Button>
         </Link>
       </div>
@@ -97,14 +102,14 @@ export default function ClubsPage() {
       {/* 📅 Top-Right Calendar Button */}
       <div className="absolute top-4 right-4">
         <Link href="/clubCalendar">
-          <Button className="bg-[#FFD200] text-[#002855] hover:bg-[#e6c100] font-semibold shadow-md transform hover:scale-105 transition duration-300">
+          <Button className="bg-[#FFD200] text-[#002855] hover:bg-[#e6c100] font-semibold shadow">
             📅 Club Calendar
           </Button>
         </Link>
       </div>
 
       {/* 🔵 Title */}
-      <h1 className="text-3xl font-bold text-[#002855] text-center mb-8">
+      <h1 className="text-3xl font-bold text-white text-center mb-8">
         Explore Clubs
       </h1>
 
@@ -140,34 +145,19 @@ export default function ClubsPage() {
 
       {/* 🗂️ Tabs */}
       <Tabs defaultValue="all" className="max-w-6xl mx-auto">
-        <TabsList className="flex gap-4 justify-center mb-6">
-          <TabsTrigger
-            value="all"
-            className="tab-trigger w-20 h-10 text-center border-2 border-[#002855] bg-white text-[#002855] font-semibold hover:bg-[#00509E] hover:text-white transform hover:scale-105 transition duration-300"
-          >
-            All Clubs
-          </TabsTrigger>
-          <TabsTrigger
-            value="sports"
-            className="tab-trigger w-20 h-10 text-center border-2 border-[#002855] bg-white text-[#002855] font-semibold hover:bg-[#00509E] hover:text-white transform hover:scale-105 transition duration-300"
-          >
-            Sports
-          </TabsTrigger>
-          <TabsTrigger
-            value="tech"
-            className="tab-trigger w-20 h-10 text-center border-2 border-[#002855] bg-white text-[#002855] font-semibold hover:bg-[#00509E] hover:text-white transform hover:scale-105 transition duration-300"
-          >
-            Tech
-          </TabsTrigger>
+        <TabsList className="grid w-full grid-cols-3 bg-[#002855] text-white mb-4">
+          <TabsTrigger value="all">All Clubs</TabsTrigger>
+          <TabsTrigger value="sports">Sports</TabsTrigger>
+          <TabsTrigger value="tech">Tech</TabsTrigger>
         </TabsList>
 
         {(['all', 'sports', 'tech'] as const).map((tab) => (
           <TabsContent key={tab} value={tab}>
-            <div className="tabs-content grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+            <div className="grid gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
               {filterClubs(mockClubs[tab]).map((club, index) => (
                 <div
                   key={index}
-                  className="club-card p-6 bg-white rounded-lg shadow-lg hover:scale-105 transform transition duration-300"
+                  className="flex flex-col items-center text-center border rounded-xl p-4 shadow hover:shadow-lg transition-shadow aspect-square bg-white"
                 >
                   <img
                     src={club.image}
@@ -179,19 +169,18 @@ export default function ClubsPage() {
                   <div className="mt-2 text-xs text-gray-500">
                     <span>Format: {club.format}</span> | <span>Host: {club.host}</span>
                   </div>
-                  {/* Buttons */}
-                  <div className="flex gap-2 w-full mt-4">
-                    <Button className="flex-1 bg-green-500 hover:bg-green-600 text-white transform hover:scale-105 transition duration-300">
+                  <div className="flex gap-2 w-full mt-auto pt-4">
+                    <Button className="flex-1 bg-green-500 hover:bg-green-600 text-white">
                       ✅ Join
                     </Button>
-                    <Button variant="outline" className="flex-1 border-gray-300 text-gray-800 hover:bg-gray-100 transform hover:scale-105 transition duration-300">
+                    <Button variant="outline" className="flex-1 border-gray-300 text-gray-800 hover:bg-gray-100">
                       ⭐ Follow
                     </Button>
                   </div>
                 </div>
               ))}
               {filterClubs(mockClubs[tab]).length === 0 && (
-                <p className="text-gray-500 italic">No clubs found.</p>
+                <p className="text-gray-200 italic text-center">No clubs found.</p>
               )}
             </div>
           </TabsContent>
