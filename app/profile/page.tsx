@@ -15,7 +15,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 
-const ProfilePage = () => {
+export default function ProfilePage() {
   const [name, setName] = useState('');
   const [bio, setBio] = useState('');
   const [profilePic, setProfilePic] = useState<string | null>(null);
@@ -45,8 +45,6 @@ const ProfilePage = () => {
             .insert([{ id }]);
           if (insertError) {
             console.error('Error inserting default profile row:', insertError);
-          } else {
-            console.log('Inserted default profile row for new user');
           }
         } else {
           console.error('Error fetching profile:', profileError);
@@ -72,7 +70,7 @@ const ProfilePage = () => {
     const fileName = `${userId}.${fileExt}`;
     const filePath = `${fileName}`;
 
-    const { data: uploadData, error: uploadError } = await supabase.storage
+    const { error: uploadError } = await supabase.storage
       .from('avatars')
       .upload(filePath, file, { upsert: true });
 
@@ -118,62 +116,43 @@ const ProfilePage = () => {
   };
 
   return (
-    <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
-      <h1>Profile Page</h1>
-      <div style={{ marginBottom: '20px' }}>
-        <p>Welcome to your profile!</p>
+    <main className="min-h-screen bg-gradient-to-br from-white to-[#f2f5fa] flex items-center justify-center px-4 py-8">
+      <div className="w-full max-w-md bg-white rounded-2xl shadow-xl border border-gray-200 p-6 space-y-6">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-[#002855]">Your Profile</h1>
+          <p className="text-sm text-gray-500 mt-1">Manage your public info</p>
+        </div>
 
-        {profilePic ? (
-          <img
-            src={profilePic}
-            alt="Profile"
-            style={{
-              width: '120px',
-              height: '120px',
-              borderRadius: '50%',
-              objectFit: 'cover',
-              marginTop: '1rem',
-            }}
-          />
-        ) : (
-          <div
-            style={{
-              width: '120px',
-              height: '120px',
-              borderRadius: '50%',
-              backgroundColor: '#ccc',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              marginTop: '1rem',
-            }}
-          >
-            <span>No Image</span>
-          </div>
-        )}
+        <div className="flex justify-center">
+          {profilePic ? (
+            <img
+              src={profilePic}
+              alt="Profile"
+              className="w-24 h-24 rounded-full object-cover border border-gray-300"
+              onError={(e) => {
+                e.currentTarget.onerror = null;
+                e.currentTarget.src = "/placeholder-avatar.png"; // fallback image
+              }}
+            />
+          ) : (
+            <div className="w-24 h-24 rounded-full bg-gray-300 flex items-center justify-center text-sm text-white">
+              No Image
+            </div>
+          )}
+        </div>
 
         <Dialog>
           <DialogTrigger asChild>
-            <button
-              style={{
-                marginTop: '1rem',
-                padding: '10px 20px',
-                backgroundColor: '#0070f3',
-                color: '#fff',
-                border: 'none',
-                borderRadius: '5px',
-                cursor: 'pointer',
-              }}
-            >
+            <Button className="w-full bg-[#002855] text-white hover:bg-[#1a3e7c] mt-2">
               Edit Profile
-            </button>
+            </Button>
           </DialogTrigger>
 
           <DialogContent>
             <DialogHeader>
               <DialogTitle>Edit Profile</DialogTitle>
             </DialogHeader>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            <div className="space-y-4">
               <div>
                 <Label htmlFor="name">Name</Label>
                 <Input
@@ -199,31 +178,19 @@ const ProfilePage = () => {
                   onChange={handleImageUpload}
                 />
               </div>
-              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem' }}>
+              <div className="flex justify-end gap-2">
                 <Button variant="outline">Cancel</Button>
                 <Button onClick={handleSave}>Save</Button>
               </div>
             </div>
           </DialogContent>
         </Dialog>
+
+        <div className="pt-6 border-t text-center text-sm text-gray-500">
+          <Link href="/" className="hover:text-[#002855] block mb-2">← Back to Home</Link>
+          <Link href="/settings" className="hover:text-[#002855]">Go to Settings</Link>
+        </div>
       </div>
-
-      <nav>
-        <ul style={{ listStyle: 'none', padding: 0 }}>
-          <li style={{ marginBottom: '10px' }}>
-            <Link href="/" style={{ color: '#0070f3', textDecoration: 'none' }}>
-              Home
-            </Link>
-          </li>
-          <li>
-            <Link href="/settings" style={{ color: '#0070f3', textDecoration: 'none' }}>
-              Settings
-            </Link>
-          </li>
-        </ul>
-      </nav>
-    </div>
+    </main>
   );
-};
-
-export default ProfilePage;
+}
