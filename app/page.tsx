@@ -1,6 +1,7 @@
 'use client';
 
 import Link from "next/link";
+import Image from "next/image";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 
@@ -23,12 +24,23 @@ export default function HomePage() {
         </svg>
       </div>
 
+      {/* 🔷 ClubHub Logo */}
+      <div className="z-10 mb-0 w-[260px]">
+        <Image
+          src="/clubhub.png"
+          alt="ClubHub Logo"
+          width={500}
+          height={500}
+          priority
+        />
+      </div>
+
       {/* 🧱 Main content card */}
       <div className="z-10">
-        <Card className="w-full max-w-xl shadow-xl border-2 border-[#002855] bg-white rounded-2xl p-10 space-y-8">
+        <Card className="w-full max-w-xl shadow-xl border-2 border-[#002855] bg-white rounded-2xl p-10 space-y-0">
           <CardHeader>
             <CardTitle className="text-5xl font-bold text-center text-[#002855]">
-              Welcome to ClubHub
+              
             </CardTitle>
           </CardHeader>
           <CardContent className="flex flex-col items-center space-y-6">
@@ -44,6 +56,7 @@ export default function HomePage() {
             </Link>
           </CardContent>
         </Card>
+
         {/* 🔗 Link to About Us */}
         <div className="mt-6 text-center">
           <Link href="/aboutUs" className="text-white text-lg underline hover:text-gray-200">
