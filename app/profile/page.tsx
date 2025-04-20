@@ -35,7 +35,7 @@ export default function ProfilePage() {
       setUserId(id);
 
       const { data: profile, error: profileError } = await supabase
-        .from('profiles')
+        .from('profiles-list')
         .select('name, bio, avatar_url')
         .eq('id', id)
         .single();
@@ -43,7 +43,7 @@ export default function ProfilePage() {
       if (profileError) {
         if (profileError.code === 'PGRST116') {
           const { error: insertError } = await supabase
-            .from('profiles')
+            .from('profiles-list')
             .insert([{ id }]);
           if (insertError) {
             console.error('Error inserting default profile row:', insertError);
@@ -92,7 +92,7 @@ export default function ProfilePage() {
       setProfilePic(cacheBustedURL);
 
       const { error: updateError } = await supabase
-        .from('profiles')
+        .from('profiles-list')
         .update({ avatar_url: cacheBustedURL })
         .eq('id', userId);
 
@@ -106,7 +106,7 @@ export default function ProfilePage() {
     if (!userId) return;
 
     const { error } = await supabase
-      .from('profiles')
+      .from('profiles-list')
       .update({ name, bio })
       .eq('id', userId);
 
