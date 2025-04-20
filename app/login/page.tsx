@@ -28,13 +28,13 @@ export default function LoginPage() {
       setErrorMsg(error.message);
     } else {
       console.log('Login success:', data);
-      router.push('/clubLists'); // ✅ Redirect to /clubs
+      router.push('/clubLists'); // redirect after successful login
     }
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
-      <Card className="w-full max-w-md shadow-lg">
+    <div className="relative flex items-center justify-center min-h-screen animated-gradient">
+      <Card className="w-full max-w-md shadow-lg z-10">
         <CardHeader>
           <CardTitle className="text-center text-2xl">Log In</CardTitle>
         </CardHeader>
