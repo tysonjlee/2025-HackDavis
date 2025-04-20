@@ -36,6 +36,22 @@ export default function RegisterPage() {
       console.error('Signup error:', error.message);
       setErrorMsg(error.message);
     } else {
+      const user = data.user;
+      if (user) {
+        const { error: profileError } = await supabase.from('profiles').insert({
+          id: user.id,
+          email: user.email,
+          name,
+          username,
+        });
+
+        if (profileError) {
+          console.error('Profile creation failed:', profileError.message);
+          setErrorMsg(profileError.message);
+          return;
+        }
+      }
+
       console.log('User signed up:', data);
       router.push('/login');
     }

@@ -9,7 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 export default function AddFriendsPage() {
   const [emailInput, setEmailInput] = useState('');
-  const [friendEmails, setFriendEmails] = useState<string[]>([]);
+  const [friendProfiles, setFriendProfiles] = useState<{ id: string; name: string }[]>([]);
   const [userId, setUserId] = useState<string | null>(null);
 
   useEffect(() => {
@@ -19,13 +19,20 @@ export default function AddFriendsPage() {
       const id = session.user.id;
       setUserId(id);
 
-      const { data, error } = await supabase
+      const { data: friendLinks, error } = await supabase
         .from('friends')
-        .select('friend_email')
+        .select('friend_id')
         .eq('user_id', id);
 
-      if (!error && data) {
-        setFriendEmails(data.map((entry) => entry.friend_email));
+      if (!error && friendLinks.length > 0) {
+        const friendIds = friendLinks.map((f) => f.friend_id);
+
+        const { data: profiles } = await supabase
+          .from('profiles')
+          .select('id, name')
+          .in('id', friendIds);
+
+        if (profiles) setFriendProfiles(profiles);
       }
     };
 
@@ -35,15 +42,40 @@ export default function AddFriendsPage() {
   const handleAddFriend = async () => {
     if (!userId || !emailInput) return;
 
+    const { data: user, error: findError } = await supabase
+      .from('profiles')
+      .select('id, name')
+      .eq('email', emailInput)
+      .single();
+
+    if (!findError && user) {
+      const { error } = await supabase
+        .from('friends')
+        .insert({ user_id: userId, friend_id: user.id });
+
+      if (!error) {
+        setFriendProfiles((prev) => [...prev, { id: user.id, name: user.name }]);
+        setEmailInput('');
+      } else {
+        console.error('Error adding friend:', error);
+      }
+    } else {
+      console.error('User not found with that email.');
+    }
+  };
+
+  const handleRemoveFriend = async (friendId: string) => {
+    if (!userId) return;
+
     const { error } = await supabase
       .from('friends')
-      .insert({ user_id: userId, friend_email: emailInput });
+      .delete()
+      .match({ user_id: userId, friend_id: friendId });
 
     if (!error) {
-      setFriendEmails((prev) => [...prev, emailInput]);
-      setEmailInput('');
+      setFriendProfiles((prev) => prev.filter((f) => f.id !== friendId));
     } else {
-      console.error('Error adding friend:', error);
+      console.error('Error removing friend:', error);
     }
   };
 
@@ -56,7 +88,7 @@ export default function AddFriendsPage() {
         <CardHeader>
           <CardTitle className="text-xl font-bold text-center">Add Friends</CardTitle>
         </CardHeader>
-        <CardContent className="space-y-4">
+        <CardContent className="space-y-6">
           <div className="flex gap-2">
             <Input
               placeholder="Enter friend's email"
@@ -68,12 +100,23 @@ export default function AddFriendsPage() {
 
           <div>
             <h2 className="text-md font-semibold mb-2">Your Friends:</h2>
-            {friendEmails.length > 0 ? (
-              <ul className="list-disc list-inside text-sm text-gray-700">
-                {friendEmails.map((email, index) => (
-                  <li key={index}>{email}</li>
+            {friendProfiles.length > 0 ? (
+              <div className="space-y-2">
+                {friendProfiles.map((profile) => (
+                  <div
+                    key={profile.id}
+                    className="flex items-center justify-between bg-gray-50 border border-gray-200 rounded-lg px-4 py-2 shadow-sm"
+                  >
+                    <p className="text-sm text-gray-800">{profile.name}</p>
+                    <button
+                      onClick={() => handleRemoveFriend(profile.id)}
+                      className="text-red-500 hover:text-red-700 text-xs font-semibold"
+                    >
+                      ✖
+                    </button>
+                  </div>
                 ))}
-              </ul>
+              </div>
             ) : (
               <p className="text-sm text-gray-500">No friends added yet.</p>
             )}
