@@ -5,4 +5,3 @@
 - Tyson Lee
 - Carlos Paredes
 - Andrew Toreja
-- 
