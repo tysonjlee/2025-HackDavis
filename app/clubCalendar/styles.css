@@ -1,0 +1,25 @@
+/* Add the wave animation */
+@keyframes waveAnimation {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(-100%);
+    }
+  }
+  
+  .animate-wave {
+    animation: waveAnimation 10s linear infinite;
+  }
+  
+  /* Optional: Additional custom styles */
+  .bg-wave {
+    background-color: #f0f8ff; /* Light color for the background, can change */
+  }
+  
+  .bg-gradient {
+    background: linear-gradient(45deg, #004e92, #006bb3, #004a6f);
+  }
+  
+  /* Other custom styles if needed */
+  
