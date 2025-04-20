@@ -36,7 +36,7 @@ export default function LoginPage() {
 
   return (
     <div className="relative flex items-center justify-center min-h-screen animated-gradient overflow-hidden px-4">
-      {/* 🌊 Animated Sine Wave Background */}
+      {/* 🌊 Animated background */}
       <div className="absolute top-0 left-0 w-full overflow-hidden z-0 pointer-events-none">
         <svg
           className="w-full h-[400px] animate-sine-wave transform-gpu"
@@ -52,10 +52,21 @@ export default function LoginPage() {
         </svg>
       </div>
 
-      {/* ✅ Logo + Login Card */}
+      {/* ✅ Logo and login form wrapper */}
       <div className="z-10 flex flex-col items-center">
-        {/* 🟡 ClubHub Logo */}
-        <div className="w-[400px]">
+        {/* 🔙 Back to Home Button */}
+        <div className="absolute top-4 right-4 z-20">
+          <Button
+            variant="outline"
+            onClick={() => router.push('/')}
+            className="text-[#002855] border-[#002855] hover:bg-[#e5e7eb]"
+          >
+            ⬅ Home
+          </Button>
+        </div>
+
+        {/* 🔷 ClubHub Logo */}
+        <div className="w-[260px]">
           <Image
             src="/clubhub.png"
             alt="ClubHub Logo"
@@ -65,8 +76,8 @@ export default function LoginPage() {
           />
         </div>
 
-        {/* 🧾 Login Card - moved upward with -mt-6 */}
-        <Card className="w-[380px] h-[380px] shadow-lg rounded-2xl -mt-10">
+        {/* 🔐 Login Form Card */}
+        <Card className="w-[380px] h-[400px] shadow-lg rounded-2xl -mt-6">
           <CardHeader>
             <CardTitle className="text-center text-2xl">Log In</CardTitle>
           </CardHeader>
@@ -99,6 +110,17 @@ export default function LoginPage() {
                 Sign In
               </Button>
             </form>
+
+            {/* 🔗 Register redirect */}
+            <p className="text-center text-sm mt-4">
+              Don’t have an account?{' '}
+              <a
+                href="/register"
+                className="text-blue-600 hover:underline font-medium"
+              >
+                Register here
+              </a>
+            </p>
           </CardContent>
         </Card>
       </div>

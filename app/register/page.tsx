@@ -37,13 +37,13 @@ export default function RegisterPage() {
       setErrorMsg(error.message);
     } else {
       console.log('User signed up:', data);
-      router.push('/login'); // Redirect to login page
+      router.push('/login');
     }
   };
 
   return (
     <div className="relative flex items-center justify-center min-h-screen animated-gradient overflow-hidden px-4">
-      {/* 🌊 Animated Sine Wave Background */}
+      {/* 🌊 Animated background */}
       <div className="absolute top-0 left-0 w-full overflow-hidden z-0 pointer-events-none">
         <svg
           className="w-full h-[400px] animate-sine-wave transform-gpu"
@@ -59,9 +59,18 @@ export default function RegisterPage() {
         </svg>
       </div>
 
-      {/* ✅ Logo + Card Wrapper */}
       <div className="z-10 flex flex-col items-center">
-        {/* 🟡 ClubHub Logo */}
+        {/* 🔙 Back to Home Button */}
+        <div className="absolute top-4 right-4 z-20">
+          <Button
+            variant="outline"
+            onClick={() => router.push('/')}
+            className="text-[#002855] border-[#002855] hover:bg-[#e5e7eb]"
+          >
+            ⬅ Home
+          </Button>
+        </div>
+
         <div className="w-[260px]">
           <Image
             src="/clubhub.png"
@@ -72,7 +81,6 @@ export default function RegisterPage() {
           />
         </div>
 
-        {/* 📝 Register Card */}
         <Card className="w-[380px] shadow-lg rounded-2xl -mt-6">
           <CardHeader>
             <CardTitle className="text-center text-2xl">Register</CardTitle>
