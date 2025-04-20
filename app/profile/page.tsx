@@ -73,7 +73,7 @@ export default function ProfilePage() {
 
     const { error: uploadError } = await supabase.storage
       .from('avatars')
-      .upload(filePath, file, { upsert: true }); // ✅ Overwrite old file
+      .upload(filePath, file, { upsert: true }); // ✅ Overwrite file
 
     if (uploadError) {
       console.error('Error uploading image:', uploadError);
@@ -85,13 +85,13 @@ export default function ProfilePage() {
       .getPublicUrl(filePath);
 
     const publicURL = publicURLData?.publicUrl;
-    const cacheBustedURL = `${publicURL}?t=${Date.now()}`;
+    const cacheBustedURL = `${publicURL}?t=${Date.now()}`; // ✅ Unique every time
 
     if (publicURL) {
-      // Update UI
+      // Show updated image in UI
       setProfilePic(cacheBustedURL);
 
-      // Update database with latest URL
+      // Update the database with cache-busted URL so Supabase doesn't skip it
       const { error: updateError } = await supabase
         .from('profiles')
         .update({ avatar_url: cacheBustedURL })
