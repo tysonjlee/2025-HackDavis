@@ -45,12 +45,12 @@ export default function ClubCalendarPage() {
 
   const handleAddEvent = () => {
     if (!newEvent.title || !newEvent.start || !newEvent.end) {
-      alert('Please fill out all fields');
+      alert('Please fill out all fields.');
       return;
     }
 
     if (newEvent.start > newEvent.end) {
-      alert('Start date must be before end date');
+      alert('Start date must be before end date.');
       return;
     }
 
@@ -87,7 +87,7 @@ export default function ClubCalendarPage() {
 
       {/* Title */}
       <h1 className="text-3xl font-bold text-white text-center mt-24 mb-6 z-10 relative">
-        My Calendar
+        Club Calendar
       </h1>
 
       {/* Form */}
